@@ -1,38 +1,59 @@
 .App {
-  text-align: center;
+    text-align: center;
 ***REMOVED***
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1 {
+    margin-top: 50px;
 ***REMOVED***
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  ***REMOVED***
+form {
+    width: 50%;
+    margin: auto;
+    text-align: center;
 ***REMOVED***
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+input[type="number"],
+input[type="file"],
+button {
+    display: block;
+    margin: 10px auto;
 ***REMOVED***
 
-.App-link {
-  color: #61dafb;
+button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 ***REMOVED***
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  ***REMOVED***
-  to {
-    transform: rotate(360deg);
-  ***REMOVED***
+button:hover {
+    background-color: #0069d9;
+***REMOVED***
+
+#output {
+    width: 50%;
+    margin: 20px auto;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+***REMOVED***
+
+nav {
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    align-items: center;
+***REMOVED***
+
+a {
+    text-decoration: none;
+    color: black;
+    border: 1px solid black;
+    padding: 0 0.875rem;
+***REMOVED***
+
+a:hover {
+    color: blue;
 ***REMOVED***
