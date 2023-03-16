@@ -1,4 +1,5 @@
 import React, {Component***REMOVED*** from "react";
+import axios from "axios";
 
 const utils = require("./utils");
 
@@ -7,41 +8,50 @@ class Form extends Component{
         formValues: {
             year: '',
             day: '',
-            file: ''
+            puzzleInput: null
     ***REMOVED***,
+        file: null,
         solution: ''
 ***REMOVED***
 
     handleChange(event) {
         event.preventDefault();
-        let formValues = this.state.formValues;
-        const {name, value***REMOVED*** = event.target;
-        formValues[name] = value;
-        this.setState({formValues***REMOVED***
-        console.log(typeof this.value);
+        switch(event.target.name){
+            case "file":
+                this.setState({file: event.target.files[0]***REMOVED***
+                break;
+
+            default:
+                let formValues = this.state.formValues;
+                const {name, value***REMOVED*** = event.target;
+                formValues[name] = value;
+                this.setState({formValues***REMOVED***
+    ***REMOVED***
+
 ***REMOVED***
 
     handleSubmit(event) {
         event.preventDefault();
-        const {year, day, puzzleInputFile***REMOVED*** = this.state.formValues;
+        const file = this.state.file;
 
-        if (this.state.formValues["file"]) {
-            const reader = new FileReader();
-            reader.readAsText(puzzleInputFile);
-            reader.onload = function () {
+        if (file) {
+            let reader = new FileReader();
+
+            reader.onload = async (event) => {
+                if(event.target.error){
+                    this.setState({solution: `Error: ${event.target.error***REMOVED***`***REMOVED***
+                    return;
+            ***REMOVED***
+
                 const puzzleInputResult = reader.result;
                 let puzzleInput = utils.fromArrayBuffer(puzzleInputResult);
+                let formValues = this.state.formValues;
+                formValues["puzzleInput"] = puzzleInput;
 
-                const formData = new FormData();
-                formData.append('year', year);
-                formData.append('day', day);
-                formData.append('puzzleInput', puzzleInput);
+                this.setState({formValues***REMOVED***;
 
-                fetch('http://localhost:5000/solve', {
-                    method: 'POST',
-                    body: formData
-                ***REMOVED***
-                    .then(response => response.text())
+                axios.post('http://localhost:5000/solve', this.state.formValues)
+                    .then(response => response.data)
                     .then(solution => {
                         this.setState({
                             solution: solution
@@ -53,6 +63,8 @@ class Form extends Component{
                         ***REMOVED***
                     ***REMOVED***;
         ***REMOVED***;
+
+            reader.readAsText(file);
     ***REMOVED***
 ***REMOVED***
 
@@ -94,9 +106,11 @@ class Form extends Component{
                     </select>
                 </section>
 
-                <input type="file" name="file" id="file" accept=".txt" required value={this.state.formValues["file"]***REMOVED*** onChange={this.handleChange.bind(this)***REMOVED*** />
+                <input type="file" name="file" id="file" accept=".txt" required value={this.state.filename***REMOVED*** onChange={this.handleChange.bind(this)***REMOVED*** />
 
                 <button>Submit</button>
+
+                <div id="solution">{this.state.solution***REMOVED***</div>
 
             </form>
         );

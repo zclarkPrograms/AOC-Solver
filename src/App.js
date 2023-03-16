@@ -15,8 +15,6 @@ class App extends Component {
                     <h1>Solver</h1>
 
                     <Form></Form>
-
-                    <div id="output"></div>
                 </main>
             </div >
         );
