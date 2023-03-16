@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import axios from "axios";
 
 const utils = require("./utils");
 
@@ -7,41 +8,50 @@ class Form extends Component{
         formValues: {
             year: '',
             day: '',
-            file: ''
+            puzzleInput: null
         },
+        file: null,
         solution: ''
     }
 
     handleChange(event) {
         event.preventDefault();
-        let formValues = this.state.formValues;
-        const {name, value} = event.target;
-        formValues[name] = value;
-        this.setState({formValues})
-        console.log(typeof this.value);
+        switch(event.target.name){
+            case "file":
+                this.setState({file: event.target.files[0]})
+                break;
+
+            default:
+                let formValues = this.state.formValues;
+                const {name, value} = event.target;
+                formValues[name] = value;
+                this.setState({formValues})
+        }
+
     }
 
     handleSubmit(event) {
         event.preventDefault();
-        const {year, day, puzzleInputFile} = this.state.formValues;
+        const file = this.state.file;
 
-        if (this.state.formValues["file"]) {
-            const reader = new FileReader();
-            reader.readAsText(puzzleInputFile);
-            reader.onload = function () {
+        if (file) {
+            let reader = new FileReader();
+
+            reader.onload = async (event) => {
+                if(event.target.error){
+                    this.setState({solution: `Error: ${event.target.error}`})
+                    return;
+                }
+
                 const puzzleInputResult = reader.result;
                 let puzzleInput = utils.fromArrayBuffer(puzzleInputResult);
+                let formValues = this.state.formValues;
+                formValues["puzzleInput"] = puzzleInput;
 
-                const formData = new FormData();
-                formData.append('year', year);
-                formData.append('day', day);
-                formData.append('puzzleInput', puzzleInput);
+                this.setState({formValues});
 
-                fetch('http://localhost:5000/solve', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(response => response.text())
+                axios.post('http://localhost:5000/solve', this.state.formValues)
+                    .then(response => response.data)
                     .then(solution => {
                         this.setState({
                             solution: solution
@@ -53,6 +63,8 @@ class Form extends Component{
                         })
                     });
             };
+
+            reader.readAsText(file);
         }
     }
 
@@ -94,9 +106,11 @@ class Form extends Component{
                     </select>
                 </section>
 
-                <input type="file" name="file" id="file" accept=".txt" required value={this.state.formValues["file"]} onChange={this.handleChange.bind(this)} />
+                <input type="file" name="file" id="file" accept=".txt" required value={this.state.filename} onChange={this.handleChange.bind(this)} />
 
                 <button>Submit</button>
+
+                <div id="solution">{this.state.solution}</div>
 
             </form>
         );

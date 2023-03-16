@@ -57,3 +57,7 @@ a {
 a:hover {
     color: blue;
 }
+
+#solution{
+    padding: 100px;
+}
