@@ -1,30 +1,72 @@
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-***REMOVED***
-***REMOVED***
-
-***REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 ***REMOVED***
-app.post('/solve', (req, res) => {
 ***REMOVED***
-    // Call your Advent of Code solver function with year, day, and puzzleInput
-    const solution = solveAdventOfCode(year, day, puzzleInput);
-    console.log(req.body);
+
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***
+***REMOVED***
+    const { year, day, puzzleInput, file ***REMOVED*** = req.body;
+
+    const solution = await solveAdventOfCode(year, day, puzzleInput, file);
+
 ***REMOVED***
 ***REMOVED***;
 
-// Start server
-app.listen(5000, () => {
-    console.log('Server started on port 5000');
-***REMOVED***;
+***REMOVED***
+***REMOVED***
+***REMOVED***
 
-function solveAdventOfCode(year, day, puzzleInput) {
-    return `year: ${year***REMOVED***, day: ${day***REMOVED***, puzzleInput: ${puzzleInput***REMOVED***`;
+***REMOVED***
+
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+const CONNECTION_URL = '***REMOVED***'
+***REMOVED***
+
+mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology:true ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+        ***REMOVED***
+    ***REMOVED***
+***REMOVED***
+***REMOVED***
+    ***REMOVED***
+
+***REMOVED***
+    let solution = await Solution.findOne({"year": year, "day": day***REMOVED***;
+
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***
+
+    let output = solve(puzzleInput, text, language, filename);
+
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***
 ***REMOVED***
