@@ -16,9 +16,9 @@ app.use((req, res, next) => {
 
 // POST endpoint for solving Advent of Code puzzles
 app.post('/solve', async (req, res) => {
-    const { year, day, puzzleInput, file } = req.body;
+    const { year, day, puzzleInput } = req.body;
 
-    const solution = await solveAdventOfCode(year, day, puzzleInput, file);
+    const solution = await solveAdventOfCode(year, day, puzzleInput);
 
     res.send(solution);
 });
@@ -38,6 +38,26 @@ app.post('/upload', async (req, res) => {
 app.get('/files', async (req, res) => {
     const solution = await Solution.find();
     res.send(solution);
+})
+
+app.get('/file', async (req, res) => {
+    const { year, day } = req.body;
+
+    let solution = await Solution.find({"year": year, "day": day});
+
+    if(!solution){
+        res.send("No solution for given year and day");
+    }
+
+    res.send(solution);
+})
+
+app.get('/remove', async (req, res) => {
+    const {id} = req.body;
+
+    const result = await Solution.findByIdAndRemove(id);
+
+    res.send(result);
 })
 
 const CONNECTION_URL = 'mongodb+srv://SlothsAllTheWay:ic3WFygKm2mPNaDq@cluster0.rulcp6z.mongodb.net/?retryWrites=true&w=majority'
@@ -62,7 +82,7 @@ async function solveAdventOfCode(year, day, puzzleInput) {
 
     const {text, language, filename} = solution;
 
-    let output = solve(puzzleInput, text, language, filename);
+    let output = await solve(puzzleInput, text, language, filename);
 
     if(!output){
         return "Unable to solve";
