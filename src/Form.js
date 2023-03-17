@@ -8,7 +8,8 @@ class Form extends Component{
         formValues: {
             year: '',
             day: '',
-            puzzleInput: null
+            puzzleInput: null,
+            filename: ''
     ***REMOVED***,
         file: null,
         solution: ''
@@ -16,18 +17,17 @@ class Form extends Component{
 
     handleChange(event) {
         event.preventDefault();
-        switch(event.target.name){
-            case "file":
-                this.setState({file: event.target.files[0]***REMOVED***
-                break;
 
+        switch(event.target.name){
+            case 'file':
+                this.setState({file: event.target.files[0]***REMOVED***;
+                break;
             default:
                 let formValues = this.state.formValues;
                 const {name, value***REMOVED*** = event.target;
                 formValues[name] = value;
                 this.setState({formValues***REMOVED***
     ***REMOVED***
-
 ***REMOVED***
 
     handleSubmit(event) {
@@ -47,6 +47,7 @@ class Form extends Component{
                 let puzzleInput = utils.fromArrayBuffer(puzzleInputResult);
                 let formValues = this.state.formValues;
                 formValues["puzzleInput"] = puzzleInput;
+                formValues["filename"] =
 
                 this.setState({formValues***REMOVED***;
 
@@ -106,7 +107,7 @@ class Form extends Component{
                     </select>
                 </section>
 
-                <input type="file" name="file" id="file" accept=".txt" required value={this.state.filename***REMOVED*** onChange={this.handleChange.bind(this)***REMOVED*** />
+                <input type="file" name="file" id="file" accept=".txt" required onChange={this.handleChange.bind(this)***REMOVED*** />
 
                 <button>Submit</button>
 
