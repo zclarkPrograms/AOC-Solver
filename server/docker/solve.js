@@ -1,4 +1,5 @@
 const { spawn } = require('child_process');
+const fs = require('fs');
 
 function getLanguageCommand(language, filename){
     switch(language){
@@ -11,25 +12,40 @@ function getLanguageCommand(language, filename){
     }
 }
 
-function getSolution(puzzleInput, code, language, filename) {
-    const docker = spawn('docker', ['run', '-i', 'languages', '/bin/bash', '-c', `'echo ${code} > ${filename} && ${getLanguageCommand(language, filename)}'`]);
+function runChildProcess(language, filename) {
+    return new Promise((resolve, reject) => {
+        const file = spawn('PowerShell', ['-Command', 'cat', filename]);
+        const docker = spawn('docker', ['run', '-i', 'languages', '/bin/bash', '-c', `cat >> ${filename} && ${getLanguageCommand(language, filename)}`]);
+        file.stdout.pipe(docker.stdin);
 
-    let output = "";
+        let output = '';
 
-    docker.stdout.on('data', (data) => {
-        output = data;
-        console.log(`stdout: ${data}`);
+        docker.stdout.on('data', (data) => {
+            console.log(`stdout: ${data}`);
+            output += data;
+            resolve(output);
+        });
+
+        docker.stderr.on('data', (data) => {
+            console.error(`stderr: ${data}`);
+            reject(data);
+        });
+
+        docker.on('close', (code) => {
+            console.log(`child process exited with code ${code}`);
+        });
     });
+}
 
-    docker.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
-    });
+async function getSolution(puzzleInput, code, language, filename) {
+    console.log(puzzleInput, code, language, filename);
+    console.log(getLanguageCommand(language, filename));
 
-    docker.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
-    });
+    fs.writeFileSync(filename, code, err => {
+        console.log(err);
+    })
 
-    return output;
+    return await runChildProcess(language, filename);
 }
 
 module.exports = getSolution;
