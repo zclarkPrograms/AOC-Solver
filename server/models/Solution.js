@@ -1,4 +1,4 @@
-***REMOVED***
+const mongoose = require('mongoose');
 
 const solutionSchema = mongoose.Schema({
     year: String,
@@ -6,7 +6,7 @@ const solutionSchema = mongoose.Schema({
     text: String,
     language: String,
     filename: String
-***REMOVED***;
+});
 
 const Solution = mongoose.model('Solution', solutionSchema, 'Solutions');
 
