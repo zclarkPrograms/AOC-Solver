@@ -1,4 +1,4 @@
-import React, {Component***REMOVED*** from "react";
+import React, {Component} from "react";
 import axios from "axios";
 
 const utils = require("./utils");
@@ -10,25 +10,25 @@ class Form extends Component{
             day: '',
             puzzleInput: null,
             filename: ''
-    ***REMOVED***,
+        },
         file: null,
         solution: ''
-***REMOVED***
+    }
 
     handleChange(event) {
         event.preventDefault();
 
         switch(event.target.name){
             case 'file':
-                this.setState({file: event.target.files[0]***REMOVED***;
+                this.setState({file: event.target.files[0]});
                 break;
             default:
                 let formValues = this.state.formValues;
-                const {name, value***REMOVED*** = event.target;
+                const {name, value} = event.target;
                 formValues[name] = value;
-                this.setState({formValues***REMOVED***
-    ***REMOVED***
-***REMOVED***
+                this.setState({formValues})
+        }
+    }
 
     handleSubmit(event) {
         event.preventDefault();
@@ -39,9 +39,9 @@ class Form extends Component{
 
             reader.onload = async (event) => {
                 if(event.target.error){
-                    this.setState({solution: `Error: ${event.target.error***REMOVED***`***REMOVED***
+                    this.setState({solution: `Error: ${event.target.error}`})
                     return;
-            ***REMOVED***
+                }
 
                 const puzzleInputResult = reader.result;
                 let puzzleInput = utils.fromArrayBuffer(puzzleInputResult);
@@ -49,32 +49,32 @@ class Form extends Component{
                 formValues["puzzleInput"] = puzzleInput;
                 formValues["filename"] =
 
-                this.setState({formValues***REMOVED***;
+                this.setState({formValues});
 
                 axios.post('http://localhost:5000/solve', this.state.formValues)
                     .then(response => response.data)
                     .then(solution => {
                         this.setState({
                             solution: solution
-                        ***REMOVED***
-                    ***REMOVED***
+                        })
+                    })
                     .catch(error => {
                         this.setState({
                             solution: 'Error: ' + error.message
-                        ***REMOVED***
-                    ***REMOVED***;
-        ***REMOVED***;
+                        })
+                    });
+            };
 
             reader.readAsText(file);
-    ***REMOVED***
-***REMOVED***
+        }
+    }
 
     render(){
         return (
-            <form onSubmit={this.handleSubmit.bind(this)***REMOVED***>
+            <form onSubmit={this.handleSubmit.bind(this)}>
                 <section>
                     <label htmlFor="year-selection">Year:</label>
-                    <select name="year" id="year-selection" required value={this.state.formValues["year"]***REMOVED*** onChange={this.handleChange.bind(this)***REMOVED***>
+                    <select name="year" id="year-selection" required value={this.state.formValues["year"]} onChange={this.handleChange.bind(this)}>
                         <option value="">-- Select a year --</option>
                         <option value="2022">2022</option>
                         <option value="2021">2021</option>
@@ -89,7 +89,7 @@ class Form extends Component{
 
                 <section>
                     <label htmlFor="day-selection">Day:</label>
-                    <select name="day" id="day-selection" required value={this.state.formValues["day"]***REMOVED*** onChange={this.handleChange.bind(this)***REMOVED***>
+                    <select name="day" id="day-selection" required value={this.state.formValues["day"]} onChange={this.handleChange.bind(this)}>
                         <option key="0" value="">-- Select a day --</option>
                         {Array.from(Array(25).keys())
                             .flatMap((i) => {
@@ -98,25 +98,25 @@ class Form extends Component{
                                     let day_part_2 = day + "-2";
 
                                     return [
-                                        <option key={day*2-1***REMOVED*** value={day_part_1***REMOVED***>{day_part_1***REMOVED***</option>,
-                                        <option key={day*2***REMOVED*** value={day_part_2***REMOVED***>{day_part_2***REMOVED***</option>
+                                        <option key={day*2-1} value={day_part_1}>{day_part_1}</option>,
+                                        <option key={day*2} value={day_part_2}>{day_part_2}</option>
                                     ]
-                            ***REMOVED***
+                                }
                             )
-                    ***REMOVED***
+                        }
                     </select>
                 </section>
 
-                <input type="file" name="file" id="file" accept=".txt" required onChange={this.handleChange.bind(this)***REMOVED*** />
+                <input type="file" name="file" id="file" accept=".txt" required onChange={this.handleChange.bind(this)} />
 
                 <button>Submit</button>
 
-                <div id="solution">{this.state.solution***REMOVED***</div>
+                <div id="solution">{this.state.solution}</div>
 
             </form>
         );
-***REMOVED***
+    }
 
-***REMOVED***
+}
 
 export default Form;

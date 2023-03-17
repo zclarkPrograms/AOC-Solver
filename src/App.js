@@ -1,4 +1,4 @@
-import React, { Component ***REMOVED*** from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import Form from "./Form.js";
 
@@ -18,7 +18,7 @@ class App extends Component {
                 </main>
             </div >
         );
-***REMOVED***
-***REMOVED***
+    }
+}
 
 export default App;

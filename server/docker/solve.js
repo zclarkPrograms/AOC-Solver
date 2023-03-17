@@ -1,4 +1,4 @@
-const { spawn ***REMOVED*** = require('child_process');
+const { spawn } = require('child_process');
 const fs = require('fs');
 
 function getLanguageCommand(language, filename){
@@ -9,33 +9,33 @@ function getLanguageCommand(language, filename){
             return "python3 "+filename;
         default:
             return "";
-***REMOVED***
-***REMOVED***
+    }
+}
 
 function runChildProcess(language, filename) {
     return new Promise((resolve, reject) => {
         const file = spawn('PowerShell', ['-Command', 'cat', filename]);
-        const docker = spawn('docker', ['run', '-i', 'languages', '/bin/bash', '-c', `cat >> ${filename***REMOVED*** && ${getLanguageCommand(language, filename)***REMOVED***`]);
+        const docker = spawn('docker', ['run', '-i', 'languages', '/bin/bash', '-c', `cat >> ${filename} && ${getLanguageCommand(language, filename)}`]);
         file.stdout.pipe(docker.stdin);
 
         let output = '';
 
         docker.stdout.on('data', (data) => {
-            console.log(`stdout: ${data***REMOVED***`);
+            console.log(`stdout: ${data}`);
             output += data;
             resolve(output);
-        ***REMOVED***;
+        });
 
         docker.stderr.on('data', (data) => {
-            console.error(`stderr: ${data***REMOVED***`);
+            console.error(`stderr: ${data}`);
             reject(data);
-        ***REMOVED***;
+        });
 
         docker.on('close', (code) => {
-            console.log(`child process exited with code ${code***REMOVED***`);
-        ***REMOVED***;
-    ***REMOVED***;
-***REMOVED***
+            console.log(`child process exited with code ${code}`);
+        });
+    });
+}
 
 async function getSolution(puzzleInput, code, language, filename) {
     console.log(puzzleInput, code, language, filename);
@@ -43,15 +43,15 @@ async function getSolution(puzzleInput, code, language, filename) {
 
     fs.writeFileSync(filename, code, err => {
         console.log(err);
-    ***REMOVED***
+    })
 
     let output = await runChildProcess(language, filename);
 
     fs.rm(filename, () => {
-        console.log(`File ${filename***REMOVED*** was deleted`);
-    ***REMOVED***
+        console.log(`File ${filename} was deleted`);
+    })
 
-***REMOVED***
-***REMOVED***
+    return output;
+}
 
 module.exports = getSolution;
