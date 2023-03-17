@@ -1,92 +1,95 @@
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const app = express();
+const Solution = require('./models/Solution.js');
+const solve = require('./docker/solve.js');
 
-***REMOVED***
-***REMOVED***
+require('dotenv').config()
 
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
 
-***REMOVED***
-***REMOVED***
-***REMOVED***
+// Parse request body as text
+app.use(bodyParser.json());
 
-***REMOVED***
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+})
 
-***REMOVED***
-***REMOVED***;
+// POST endpoint for solving Advent of Code puzzles
+app.post('/solve', async (req, res) => {
+    const { year, day, puzzleInput } = req.body;
 
-***REMOVED***
-***REMOVED***
-***REMOVED***
+    const solution = await solveAdventOfCode(year, day, puzzleInput);
 
-***REMOVED***
+    res.send(solution);
+});
 
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
+app.post('/upload', async (req, res) => {
+    try {
+        const solution = new Solution(req.body);
 
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
+        await solution.save();
 
-***REMOVED***
-***REMOVED***
+        res.status(201).send(solution);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+})
 
-    let solution = await Solution.find({"year": year, "day": day***REMOVED***;
+app.get('/files', async (req, res) => {
+    const solution = await Solution.find();
+    res.send(solution);
+})
 
-***REMOVED***
-***REMOVED***
-***REMOVED***
+app.get('/file', async (req, res) => {
+    const { year, day } = req.body;
 
-***REMOVED***
-***REMOVED***
+    let solution = await Solution.find({"year": year, "day": day});
 
-***REMOVED***
-***REMOVED***
+    if(!solution){
+        res.send("No solution for given year and day");
+    }
 
-***REMOVED***
+    res.send(solution);
+})
 
-***REMOVED***
-***REMOVED***
+app.get('/remove', async (req, res) => {
+    const {id} = req.body;
 
-const CONNECTION_URL = '***REMOVED***'
-***REMOVED***
+    const result = await Solution.findByIdAndRemove(id);
 
-mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology:true ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
-***REMOVED***
-    ***REMOVED***
+    res.send(result);
+})
 
-***REMOVED***
-    let solution = await Solution.findOne({"year": year, "day": day***REMOVED***;
+const CONNECTION_URL = `***REMOVED***`
+const PORT = process.env.PORT || 5000;
 
-***REMOVED***
-***REMOVED***
-***REMOVED***
+mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology:true })
+    .then(() =>{
+        app.listen(PORT, () =>{
+            console.log(`Server running on port: ${PORT} `)
+        })
+    })
+    .catch((error) => {
+        console.log(error.message)
+    })
 
-***REMOVED***
+async function solveAdventOfCode(year, day, puzzleInput) {
+    let solution = await Solution.findOne({"year": year, "day": day});
 
-***REMOVED***
+    if(!solution){
+        return "No solution for given year and day";
+    }
 
-***REMOVED***
-***REMOVED***
-***REMOVED***
+    const {text, language, filename} = solution;
 
-***REMOVED***
-***REMOVED***
+    let output = await solve(puzzleInput, text, language, filename);
+
+    if(!output){
+        return "Unable to solve";
+    }
+
+    return output;
+}
