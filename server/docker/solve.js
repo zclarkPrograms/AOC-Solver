@@ -1,4 +1,5 @@
 const { spawn ***REMOVED*** = require('child_process');
+const fs = require('fs');
 
 function getLanguageCommand(language, filename){
     switch(language){
@@ -11,25 +12,40 @@ function getLanguageCommand(language, filename){
 ***REMOVED***
 ***REMOVED***
 
-function getSolution(puzzleInput, code, language, filename) {
-    const docker = spawn('docker', ['run', '-i', 'languages', '/bin/bash', '-c', `'echo ${code***REMOVED*** > ${filename***REMOVED*** && ${getLanguageCommand(language, filename)***REMOVED***'`]);
+function runChildProcess(language, filename) {
+    return new Promise((resolve, reject) => {
+        const file = spawn('PowerShell', ['-Command', 'cat', filename]);
+        const docker = spawn('docker', ['run', '-i', 'languages', '/bin/bash', '-c', `cat >> ${filename***REMOVED*** && ${getLanguageCommand(language, filename)***REMOVED***`]);
+        file.stdout.pipe(docker.stdin);
 
-    let output = "";
+        let output = '';
 
-    docker.stdout.on('data', (data) => {
-        output = data;
-        console.log(`stdout: ${data***REMOVED***`);
+        docker.stdout.on('data', (data) => {
+            console.log(`stdout: ${data***REMOVED***`);
+            output += data;
+            resolve(output);
+        ***REMOVED***;
+
+        docker.stderr.on('data', (data) => {
+            console.error(`stderr: ${data***REMOVED***`);
+            reject(data);
+        ***REMOVED***;
+
+        docker.on('close', (code) => {
+            console.log(`child process exited with code ${code***REMOVED***`);
+        ***REMOVED***;
     ***REMOVED***;
-
-    docker.stderr.on('data', (data) => {
-        console.error(`stderr: ${data***REMOVED***`);
-    ***REMOVED***;
-
-    docker.on('close', (code) => {
-        console.log(`child process exited with code ${code***REMOVED***`);
-    ***REMOVED***;
-
 ***REMOVED***
+
+async function getSolution(puzzleInput, code, language, filename) {
+    console.log(puzzleInput, code, language, filename);
+    console.log(getLanguageCommand(language, filename));
+
+    fs.writeFileSync(filename, code, err => {
+        console.log(err);
+    ***REMOVED***
+
+    return await runChildProcess(language, filename);
 ***REMOVED***
 
 module.exports = getSolution;

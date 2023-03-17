@@ -16,9 +16,9 @@
 
 ***REMOVED***
 ***REMOVED***
-    const { year, day, puzzleInput, file ***REMOVED*** = req.body;
+***REMOVED***
 
-    const solution = await solveAdventOfCode(year, day, puzzleInput, file);
+***REMOVED***
 
 ***REMOVED***
 ***REMOVED***;
@@ -37,6 +37,26 @@
 
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***
+***REMOVED***
+
+    let solution = await Solution.find({"year": year, "day": day***REMOVED***;
+
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***
+***REMOVED***
+
+***REMOVED***
+***REMOVED***
+
+***REMOVED***
+
 ***REMOVED***
 ***REMOVED***
 
@@ -62,7 +82,7 @@ mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology:true
 
 ***REMOVED***
 
-    let output = solve(puzzleInput, text, language, filename);
+***REMOVED***
 
 ***REMOVED***
 ***REMOVED***
