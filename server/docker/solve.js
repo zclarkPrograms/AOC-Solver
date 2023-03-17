@@ -45,7 +45,13 @@ async function getSolution(puzzleInput, code, language, filename) {
         console.log(err);
     ***REMOVED***
 
-    return await runChildProcess(language, filename);
+    let output = await runChildProcess(language, filename);
+
+    fs.rm(filename, () => {
+        console.log(`File ${filename***REMOVED*** was deleted`);
+    ***REMOVED***
+
+***REMOVED***
 ***REMOVED***
 
 module.exports = getSolution;
