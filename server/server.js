@@ -5,6 +5,9 @@ const app = express();
 const Solution = require('./models/Solution.js');
 const solve = require('./docker/solve.js');
 
+require('dotenv').config()
+
+
 // Parse request body as text
 app.use(bodyParser.json());
 
@@ -60,7 +63,7 @@ app.get('/remove', async (req, res) => {
     res.send(result);
 })
 
-const CONNECTION_URL = 'mongodb+srv://SlothsAllTheWay:ic3WFygKm2mPNaDq@cluster0.rulcp6z.mongodb.net/?retryWrites=true&w=majority'
+const CONNECTION_URL = `mongodb+srv://SlothsAllTheWay:${process.env.MONGODB_PASSWORD}@cluster0.rulcp6z.mongodb.net/?retryWrites=true&w=majority`
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology:true })
