@@ -1,12 +1,12 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 
-function getLanguageCommand(puzzleInput, language, filename){
-    switch(language){
+function getLanguageCommand(puzzleInput, language, filename) {
+    switch (language) {
         case "java":
-            return "java "+filename+" "+puzzleInput;
+            return "java " + filename + " " + puzzleInput;
         case "python":
-            return "python3 "+filename+" "+puzzleInput;
+            return "python3 " + filename + " " + puzzleInput;
         default:
             return "";
     }
@@ -28,7 +28,7 @@ function runChildProcess(puzzleInput, language, filename) {
 
         docker.stderr.on('data', (data) => {
             console.error(`stderr: ${data}`);
-            reject(""+data);
+            reject("" + data);
         });
 
         docker.on('close', (code) => {
@@ -47,10 +47,10 @@ async function getSolution(puzzleInput, code, language, filename) {
 
     let output = "";
 
-    try{
+    try {
         output = await runChildProcess(puzzleInput, language, filename);
     }
-    catch(err){
+    catch (err) {
         console.log(err);
     }
 
