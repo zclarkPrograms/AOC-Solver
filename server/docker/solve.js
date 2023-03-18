@@ -1,21 +1,21 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 
-function getLanguageCommand(language, filename){
+function getLanguageCommand(puzzleInput, language, filename){
     switch(language){
         case "java":
-            return "java "+filename;
+            return "java "+filename+" "+puzzleInput;
         case "python":
-            return "python3 "+filename;
+            return "python3 "+filename+" "+puzzleInput;
         default:
             return "";
     }
 }
 
-function runChildProcess(language, filename) {
+function runChildProcess(puzzleInput, language, filename) {
     return new Promise((resolve, reject) => {
         const file = spawn('PowerShell', ['-Command', 'cat', filename]);
-        const docker = spawn('docker', ['run', '-i', 'languages', '/bin/bash', '-c', `cat >> ${filename} && ${getLanguageCommand(language, filename)}`]);
+        const docker = spawn('docker', ['run', '-i', 'languages', '/bin/bash', '-c', `cat >> ${filename} && ${getLanguageCommand(puzzleInput, language, filename)}`]);
         file.stdout.pipe(docker.stdin);
 
         let output = '';
@@ -28,7 +28,7 @@ function runChildProcess(language, filename) {
 
         docker.stderr.on('data', (data) => {
             console.error(`stderr: ${data}`);
-            reject(data);
+            reject(""+data);
         });
 
         docker.on('close', (code) => {
@@ -38,14 +38,21 @@ function runChildProcess(language, filename) {
 }
 
 async function getSolution(puzzleInput, code, language, filename) {
-    console.log(puzzleInput, code, language, filename);
-    console.log(getLanguageCommand(language, filename));
+    //console.log(puzzleInput, code, language, filename);
+    console.log(getLanguageCommand(puzzleInput, language, filename));
 
     fs.writeFileSync(filename, code, err => {
         console.log(err);
     })
 
-    let output = await runChildProcess(language, filename);
+    let output = "";
+
+    try{
+        output = await runChildProcess(puzzleInput, language, filename);
+    }
+    catch(err){
+        console.log(err);
+    }
 
     fs.rm(filename, () => {
         console.log(`File ${filename} was deleted`);
