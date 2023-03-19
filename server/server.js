@@ -24,8 +24,10 @@ app.post('/solve', async (req, res) => {
 
 app.post('/upload', async (req, res) => {
     try {
-        const solution = new Solution(req.body);
+        const {year, day} = req.body;
+        await Solution.deleteMany({"year": year, "day": day});
 
+        const solution = new Solution(req.body);
         await solution.save();
 
         res.status(201).send(solution);
@@ -55,7 +57,7 @@ app.get('/remove', async (req, res) => {
     const {id, year, day} = req.body;
 
     if(year && day){
-        res.send(await Solution.deleteMany({year: "year", day: "day"}))
+        res.send(await Solution.deleteMany({"year": year, "day": day}));
         return;
     }
 

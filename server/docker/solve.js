@@ -1,21 +1,25 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 
-function getLanguageCommand(puzzleInput, language, filename) {
+function getProgramName(language){
     switch (language) {
-        case "java":
-            return "java " + filename + " " + puzzleInput;
-        case "python":
-            return "python3 " + filename + " " + puzzleInput;
+        case "javascript":
+            return "node";
         default:
-            return "";
+            return language;
     }
+}
+
+function getLanguageCommand(puzzleInput, language, filename) {
+    const programName = getProgramName(language);
+
+    return `${programName} ${filename} "${puzzleInput}"`;
 }
 
 function runChildProcess(puzzleInput, language, filename) {
     return new Promise((resolve, reject) => {
         const file = spawn('PowerShell', ['-Command', 'cat', filename]);
-        const docker = spawn('docker', ['run', '-i', 'languages', '/bin/bash', '-c', `cat >> ${filename} && ${getLanguageCommand(puzzleInput, language, filename)}`]);
+        const docker = spawn('docker', ['run', '-i', 'languages', '/bin/bash', '-c', `cat > ${filename} && ${getLanguageCommand(puzzleInput, language, filename)}`]);
         file.stdout.pipe(docker.stdin);
 
         let output = '';
@@ -38,9 +42,6 @@ function runChildProcess(puzzleInput, language, filename) {
 }
 
 async function getSolution(puzzleInput, code, language, filename) {
-    //console.log(puzzleInput, code, language, filename);
-    console.log(getLanguageCommand(puzzleInput, language, filename));
-
     fs.writeFileSync(filename, code, err => {
         console.log(err);
     })
