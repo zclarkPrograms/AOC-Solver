@@ -52,7 +52,12 @@ app.get('/file', async (req, res) => {
 })
 
 app.get('/remove', async (req, res) => {
-    const {id} = req.body;
+    const {id, year, day} = req.body;
+
+    if(year && day){
+        res.send(await Solution.deleteMany({year: "year", day: "day"}))
+        return;
+    }
 
     const result = await Solution.findByIdAndRemove(id);
 
