@@ -59,6 +59,10 @@ app.get('/remove', async (req, res) => {
     res.send(result);
 })
 
+app.get('/removeAll', async (req, res) => {
+    res.send(await Solution.deleteMany());
+})
+
 const CONNECTION_URL = `***REMOVED***?retryWrites=true&w=majority`
 const PORT = process.env.PORT || 5000;
 
