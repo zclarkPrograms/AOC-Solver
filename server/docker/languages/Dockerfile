@@ -2,7 +2,7 @@
 FROM ubuntu:latest
 
 # Update the package list and install the necessary packages
-RUN apt-get update && apt-get install -y python3 python3-pip openjdk-11-jdk
+RUN apt-get update && apt-get install -y python3 python3-pip openjdk-11-jdk nodejs
 
 # Set the working directory to /app
 WORKDIR /app
