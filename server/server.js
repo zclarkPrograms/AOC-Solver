@@ -25,7 +25,7 @@ app.post('/solve', async (req, res) => {
 app.post('/upload', async (req, res) => {
     try {
         const {year, day} = req.body;
-        await Solution.deleteMany({"year": year, "day": day});
+        await Solution.deleteMany({year: year, day: day});
 
         const solution = new Solution(req.body);
         await solution.save();
@@ -44,7 +44,7 @@ app.get('/files', async (req, res) => {
 app.get('/file', async (req, res) => {
     const { year, day } = req.body;
 
-    let solution = await Solution.find({"year": year, "day": day});
+    let solution = await Solution.find({year: year, day: day});
 
     if(!solution){
         res.send("No solution for given year and day");
@@ -57,7 +57,7 @@ app.get('/remove', async (req, res) => {
     const {id, year, day} = req.body;
 
     if(year && day){
-        res.send(await Solution.deleteMany({"year": year, "day": day}));
+        res.send(await Solution.deleteMany({year: year, day: day}));
         return;
     }
 
@@ -84,7 +84,7 @@ mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology:true
     })
 
 async function solveAdventOfCode(year, day, puzzleInput) {
-    let solution = await Solution.findOne({"year": year, "day": day});
+    let solution = await Solution.findOne({year: year, day: day});
 
     if(!solution){
         return "No solution for given year and day";
