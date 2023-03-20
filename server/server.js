@@ -24,8 +24,8 @@ app.post('/solve', async (req, res) => {
 
 app.post('/upload', async (req, res) => {
     try {
-        const {year, day} = req.body;
-        await Solution.deleteMany({"year": year, "day": day});
+        const { year, day } = req.body;
+        await Solution.deleteMany({ "year": year, "day": day });
 
         const solution = new Solution(req.body);
         await solution.save();
@@ -44,9 +44,9 @@ app.get('/files', async (req, res) => {
 app.get('/file', async (req, res) => {
     const { year, day } = req.body;
 
-    let solution = await Solution.find({"year": year, "day": day});
+    let solution = await Solution.find({ "year": year, "day": day });
 
-    if(!solution){
+    if (!solution) {
         res.send("No solution for given year and day");
     }
 
@@ -54,10 +54,10 @@ app.get('/file', async (req, res) => {
 })
 
 app.get('/remove', async (req, res) => {
-    const {id, year, day} = req.body;
+    const { id, year, day } = req.body;
 
-    if(year && day){
-        res.send(await Solution.deleteMany({"year": year, "day": day}));
+    if (year && day) {
+        res.send(await Solution.deleteMany({ "year": year, "day": day }));
         return;
     }
 
@@ -70,12 +70,11 @@ app.get('/removeAll', async (req, res) => {
     res.send(await Solution.deleteMany());
 })
 
-const CONNECTION_URL = `***REMOVED***?retryWrites=true&w=majority`
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology:true })
-    .then(() =>{
-        app.listen(PORT, () =>{
+mongoose.connect(process.env.MONGODB_CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        app.listen(PORT, () => {
             console.log(`Server running on port: ${PORT} `)
         })
     })
@@ -84,17 +83,17 @@ mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology:true
     })
 
 async function solveAdventOfCode(year, day, puzzleInput) {
-    let solution = await Solution.findOne({"year": year, "day": day});
+    let solution = await Solution.findOne({ "year": year, "day": day });
 
-    if(!solution){
+    if (!solution) {
         return "No solution for given year and day";
     }
 
-    const {text, language, filename} = solution;
+    const { text, language, filename } = solution;
 
     let output = await solve(puzzleInput, text, language, filename);
 
-    if(!output){
+    if (!output) {
         return "Unable to solve";
     }
 
