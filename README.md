@@ -15,5 +15,5 @@ This program allows the user to select a specific challenge and submit the puzzl
 
 ## Setup
 Install node\
-Install packages `npm install react-scripts express body-parser cors mongoose` \
+Install packages `npm install react-scripts react-router-dom express body-parser cors mongoose` \
 Install docker

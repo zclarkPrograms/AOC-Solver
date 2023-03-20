@@ -1,24 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
-import Form from "./Form.js";
+import Home from "./Home"
+import Solve from "./Solve"
+import About from "./About";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 
-class App extends Component {
-    render(){
-        return (
-            <div className="App">
-                <nav id="main">
-                    <a href="home.html">Home</a>
-                    <a href="solve.html">Solve</a>
-                    <a href="about.html">About</a>
-                </nav>
-                <main>
-                    <h1>Solver</h1>
+function App() {
+    return (
+        <BrowserRouter>
+        <div className="App">
 
-                    <Form></Form>
-                </main>
-            </div >
-        );
-    }
+        </div >
+            <Routes>
+                <Route path="/home" element={<Home/>}></Route>
+                <Route path="/solve" element={<Solve/>}></Route>
+                <Route path="/about" element={<About/>}></Route>
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;

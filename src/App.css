@@ -1,9 +1,6 @@
-.App {
-    text-align: center;
-}
-
 h1 {
     margin-top: 50px;
+    text-align: center;
 }
 
 form {
@@ -60,4 +57,5 @@ a:hover {
 
 #solution{
     padding: 100px;
+    border: 1px solid black;
 }
